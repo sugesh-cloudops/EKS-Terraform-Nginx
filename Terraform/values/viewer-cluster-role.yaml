@@ -1,0 +1,9 @@
+# This file defines a ClusterRole in Kubernetes that grants read-only access to various resources.apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: viewer
+rules:
+- apiGroups: ["*"]
+  resources: ["deployments", "pods", "services", "configmaps", "secrets", "namespaces", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
