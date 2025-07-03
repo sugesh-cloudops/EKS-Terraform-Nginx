@@ -39,6 +39,7 @@ data "aws_eks_cluster_auth" "eks" {
 
 provider "helm" {
   alias = "eks"
+  
 
   kubernetes {
     host                   = data.aws_eks_cluster.eks.endpoint
@@ -87,5 +88,5 @@ module "metric_server" {
     helm = helm.eks
   }
 
-  
+  depends_on = [ module.eks ]
 }
