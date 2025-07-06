@@ -2,7 +2,6 @@ terraform {
   required_providers {
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.13"
     }
   }
 }
@@ -17,5 +16,4 @@ resource "helm_release" "metrics-server" {
     file(var.metrics_server_values_file)
   ]
 
- 
 }
