@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-deploy-01
+  namespace: test-deploy
+spec:
+  ports:
+    - port: 8080
+      targetPort: http
+  selector:
+    app: test-deploy-01
