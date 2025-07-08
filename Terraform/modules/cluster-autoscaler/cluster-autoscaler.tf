@@ -12,8 +12,8 @@ resource "aws_iam_role" "cluster_autoscaler" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           "StringEquals" = {
-            "pods.eks.amazonaws.com/sa-name"      = "cluster-autoscaler",
-            "pods.eks.amazonaws.com/sa-namespace" = "kube-system"
+            "sts:pods.eks.amazonaws.com/sa-name"      = "cluster-autoscaler",
+            "sts:pods.eks.amazonaws.com/sa-namespace" = "kube-system"
           }
         }
       }
