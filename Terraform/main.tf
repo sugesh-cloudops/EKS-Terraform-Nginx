@@ -90,3 +90,28 @@ module "metric_server" {
 
   depends_on = [ module.eks ]
 }
+module "pod_identity_addon" {
+  source = "./modules/pod-identity-addon"
+
+  cluster_name = var.cluster_name
+
+  providers = {
+    aws = aws
+  }
+
+  depends_on = [ module.eks ]
+  
+}
+module "cluster_autoscaler" {
+  source = "./modules/cluster-autoscaler"
+
+  cluster_name = var.cluster_name
+  region       = var.region
+
+  providers = {
+    helm = helm.eks
+    aws  = aws
+  }
+
+  depends_on = [ module.eks ]
+}
