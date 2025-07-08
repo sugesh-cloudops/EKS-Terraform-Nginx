@@ -9,6 +9,13 @@ resource "aws_iam_role" "cluster_autoscaler" {
         Principal = {
           Service = "pods.eks.amazonaws.com"
         }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          "StringEquals" = {
+            "pods.eks.amazonaws.com/sa-name"      = "cluster-autoscaler",
+            "pods.eks.amazonaws.com/sa-namespace" = "kube-system"
+          }
+        }
       }
     ]
   })
