@@ -2,17 +2,18 @@ resource "aws_iam_role" "cluster_autoscaler" {
   name = "${var.cluster_name}-cluster-autoscaler"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Principal = {
-          Service = "eks.amazonaws.com"
-        }
-        Action = "sts:AssumeRoleWithWebIdentity"
+          Service = "pods.eks.amazonaws.com"
+        },
+        Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
           "StringEquals" = {
-            "sts:aws:aud" = "sts.amazonaws.com"
+            "pods.eks.amazonaws.com/sa-name"      = "cluster-autoscaler",
+            "pods.eks.amazonaws.com/sa-namespace" = "kube-system"
           }
         }
       }
