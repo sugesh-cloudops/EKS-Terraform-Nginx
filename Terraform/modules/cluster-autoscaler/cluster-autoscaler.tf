@@ -13,7 +13,6 @@ resource "aws_iam_role" "cluster_autoscaler" {
         Condition = {
           "StringEquals" = {
             "sts:aws:aud" = "sts.amazonaws.com"
-            "sts:eks.amazonaws.com/role-arn" = aws_iam_role.cluster_autoscaler.arn
           }
         }
       }
