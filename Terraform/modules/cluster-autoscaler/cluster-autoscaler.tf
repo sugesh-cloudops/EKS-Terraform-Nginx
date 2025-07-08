@@ -7,13 +7,13 @@ resource "aws_iam_role" "cluster_autoscaler" {
       {
         Effect = "Allow"
         Principal = {
-          Service = "pods.eks.amazonaws.com"
+          Service = "eks.amazonaws.com"
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           "StringEquals" = {
-            "sts:pods.eks.amazonaws.com/sa-name"      = "cluster-autoscaler",
-            "sts:pods.eks.amazonaws.com/sa-namespace" = "kube-system"
+            "sts:aws:aud" = "sts.amazonaws.com"
+            "sts:eks.amazonaws.com/role-arn" = aws_iam_role.cluster_autoscaler.arn
           }
         }
       }
@@ -51,11 +51,10 @@ resource "aws_iam_role_policy_attachment" "cluster_autoscaler_attachment" {
 }
 
 resource "aws_eks_pod_identity_association" "cluster_autoscaler_association" {
-    cluster_name = var.cluster_name
-    namespace = "kube-system"
-    service_account = "cluster-autoscaler"
-    role_arn = aws_iam_role.cluster_autoscaler.arn
-  
+  cluster_name    = var.cluster_name
+  namespace       = "kube-system"
+  service_account = "cluster-autoscaler"
+  role_arn        = aws_iam_role.cluster_autoscaler.arn
 }
 
 resource "helm_release" "cluster_autoscaler" {
