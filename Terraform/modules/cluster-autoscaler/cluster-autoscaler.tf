@@ -1,19 +1,23 @@
 resource "aws_iam_role" "cluster_autoscaler" {
-    name = "${var.cluster_name}-cluster-autoscaler"
-    
-    assume_role_policy = jsonencode({
-        Version = "2012-10-17"
-        Statement = [
-        {
-            Action = "sts:AssumeRole"
-            Effect = "Allow"
-            Principal = {
-            Service = "ec2.amazonaws.com"
-            }
+  name = "${var.cluster_name}-cluster-autoscaler"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "pods.eks.amazonaws.com"
         }
-        ]
-    })
-  
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "pods.eks.amazonaws.com/assume-role" = "true"
+          }
+        }
+      }
+    ]
+  })
 }
 resource "aws_iam_policy" "cluster_autoscaler_policy" {
     name = "${var.cluster_name}-cluster-autoscaler-policy"
