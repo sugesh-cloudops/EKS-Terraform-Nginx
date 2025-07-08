@@ -29,7 +29,7 @@ variable "public_subnet_cidrs" {
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "Crewmeister-cluster"
+  default     = "Test-cluster"
 }
 variable "cluster_version" {
   description = "Kubernetes version"
@@ -52,9 +52,9 @@ variable "node_groups" {
       instance_types = ["t2.medium"]
       capacity_type  = "ON_DEMAND"
       scaling_config = {
-        desired_size = 2
+        desired_size = 1
         max_size     = 2
-        min_size     = 2
+        min_size     = 1
       }
     }
   }
