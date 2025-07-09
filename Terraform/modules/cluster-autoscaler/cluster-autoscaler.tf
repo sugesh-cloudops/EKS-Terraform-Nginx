@@ -7,7 +7,7 @@ resource "aws_iam_role" "cluster_autoscaler" {
       {
         Effect = "Allow"
         Action = [
-            "sts:AssumeRole"
+            "sts:AssumeRole",
             "sts:TagSession"
         ]
         Principal = {
