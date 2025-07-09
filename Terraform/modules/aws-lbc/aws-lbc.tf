@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "aws_lbc" {
   
 }
 resource "aws_iam_role" "aws_lbc" {
-    name = "${aws_eks_cluster.eks.name}-aws-lbc"
+    name = "${var.cluster_name}-aws-lbc"
     assume_role_policy = data.aws_iam_policy_document.aws_lbc.json
   
 }
