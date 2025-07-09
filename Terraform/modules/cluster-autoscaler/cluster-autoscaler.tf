@@ -5,18 +5,16 @@ resource "aws_iam_role" "cluster_autoscaler" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow",
+        Effect = "Allow"
+        Action = [
+            "sts:AssumeRole"
+            "sts:TagSession"
+        ]
         Principal = {
           Service = "pods.eks.amazonaws.com"
-        },
-        Action = "sts:AssumeRoleWithWebIdentity",
-        Condition = {
-          "StringEquals" : {
-            "pods.eks.amazonaws.com/assume-role" : "true"
-          }
         }
-      }
-    ]
+        }
+        ]
   })
 }
 resource "aws_iam_policy" "cluster_autoscaler_policy" {
