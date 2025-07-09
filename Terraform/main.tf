@@ -122,6 +122,11 @@ module "aws_lbc" {
   cluster_name = var.cluster_name
   region       = var.region
 
+  providers = {
+    helm = helm.eks
+    aws  = aws
+  }
+
   depends_on = [ module.eks ]
   
 }
