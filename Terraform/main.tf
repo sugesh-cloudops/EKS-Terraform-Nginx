@@ -115,3 +115,13 @@ module "cluster_autoscaler" {
 
   depends_on = [ module.eks ]
 }
+
+module "aws_lbc" {
+  source = "./modules/aws-lbc"
+
+  cluster_name = var.cluster_name
+  region       = var.region
+
+  depends_on = [ module.eks ]
+  
+}
