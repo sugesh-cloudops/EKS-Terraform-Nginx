@@ -162,5 +162,5 @@ module "argocd" {
     aws  = aws
   }
 
-  depends_on = [module.eks, null_resource.update_kubeconfig]
+  depends_on = [module.eks, null_resource.update_kubeconfig, kubernetes_namespace.argocd]
 }
