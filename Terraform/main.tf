@@ -152,7 +152,7 @@ module "aws_lbc" {
   
 }
 module "argocd" {
-  source = "./modules/argocd"
+  source = "./modules/argoCD"
 
   cluster_name = var.cluster_name
   region       = var.region
