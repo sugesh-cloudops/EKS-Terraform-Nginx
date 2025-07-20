@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    helm = {
+      source = "hashicorp/helm"
+    }
+  }
+}
+
 data "aws_iam_policy_document" "aws_lbc" {
     statement {
       effect = "Allow"
@@ -37,6 +45,7 @@ resource "aws_eks_pod_identity_association" "aws_lbc" {
 }
 
 resource "helm_release" "aws_lbc" {
+    provider   = helm
     name       = "aws-load-balancer-controller"
     repository = "https://aws.github.io/eks-charts"
     chart      = "aws-load-balancer-controller"

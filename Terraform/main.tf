@@ -11,16 +11,27 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "terraform-eks-state-s3-bucket-crewmeister"
+    bucket         = "terraform-eks-state-s3-bucket-test"
     key            = "terraform.tfstate"
     region         = "us-west-2"
-    dynamodb_table = "terraform-eks-state-lock-table-crewmeister"
+    dynamodb_table = "terraform-eks-state-lock-table"
     encrypt        = true
   }
 }
 
 provider "aws" {
   region = var.region
+}
+provider "helm" {
+  alias = "eks"
+  
+
+  kubernetes {
+    host                   = data.aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks.token
+  }
+  
 }
 
 # EKS cluster outputs used for Helm setup
@@ -37,14 +48,24 @@ data "aws_eks_cluster_auth" "eks" {
   depends_on = [module.eks]
 }
 
-provider "helm" {
-  alias = "eks"
-  
+resource "null_resource" "wait_for_eks" {
+  depends_on = [module.eks]
 
-  kubernetes {
-    host                   = data.aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.eks.token
+  provisioner "local-exec" {
+    command = <<EOT
+      aws eks wait cluster-active --region ${var.region} --name ${module.eks.cluster_name} && \
+      for i in {1..30}; do kubectl get nodes --kubeconfig ~/.kube/config && break || sleep 10; done
+    EOT
+  }
+}
+
+resource "null_resource" "update_kubeconfig" {
+  depends_on = [module.eks]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}
+    EOT
   }
 }
 
@@ -88,7 +109,7 @@ module "metric_server" {
     helm = helm.eks
   }
 
-  depends_on = [ module.eks ]
+  depends_on = [module.eks, null_resource.update_kubeconfig]
 }
 module "pod_identity_addon" {
   source = "./modules/pod-identity-addon"
@@ -99,7 +120,7 @@ module "pod_identity_addon" {
     aws = aws
   }
 
-  depends_on = [ module.eks ]
+  depends_on = [module.eks, null_resource.update_kubeconfig]
   
 }
 module "cluster_autoscaler" {
@@ -113,7 +134,7 @@ module "cluster_autoscaler" {
     aws  = aws
   }
 
-  depends_on = [ module.eks ]
+  depends_on = [module.eks, null_resource.update_kubeconfig]
 }
 
 module "aws_lbc" {
@@ -127,6 +148,19 @@ module "aws_lbc" {
     aws  = aws
   }
 
-  depends_on = [ module.eks ]
+  depends_on = [module.eks, null_resource.update_kubeconfig]
   
+}
+module "argocd" {
+  source = "./modules/argocd"
+
+  cluster_name = var.cluster_name
+  region       = var.region
+
+  providers = {
+    helm = helm.eks
+    aws  = aws
+  }
+
+  depends_on = [module.eks, null_resource.update_kubeconfig]
 }

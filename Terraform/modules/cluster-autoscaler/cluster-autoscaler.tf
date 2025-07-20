@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    helm = {
+      source = "hashicorp/helm"
+    }
+  }
+}
+
+
+
 resource "aws_iam_role" "cluster_autoscaler" {
   name = "${var.cluster_name}-cluster-autoscaler"
 
@@ -55,6 +65,7 @@ resource "aws_eks_pod_identity_association" "cluster_autoscaler_association" {
 }
 
 resource "helm_release" "cluster_autoscaler" {
+    provider   = helm
     name       = "cluster-autoscaler"
     repository = "https://kubernetes.github.io/autoscaler"
     chart      = "cluster-autoscaler"

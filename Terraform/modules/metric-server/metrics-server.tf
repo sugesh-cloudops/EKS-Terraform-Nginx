@@ -1,11 +1,13 @@
 terraform {
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
     }
   }
 }
+
 resource "helm_release" "metrics-server" {
+  provider   = helm
   name       = "metrics-server"
   repository = "https://kubernetes-sigs.github.io/metrics-server"
   chart      = "metrics-server"
