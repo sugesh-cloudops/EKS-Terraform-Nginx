@@ -151,12 +151,6 @@ module "aws_lbc" {
   depends_on = [module.eks, null_resource.update_kubeconfig]
   
 }
-resource "kubernetes_namespace" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-  depends_on = [null_resource.update_kubeconfig]
-}
 module "argocd" {
   source = "./modules/argoCD"
 
