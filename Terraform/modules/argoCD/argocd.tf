@@ -19,5 +19,9 @@ resource "helm_release" "argocd" {
     name  = "server.service.ports.https.targetPort"
     value = "8080"
     }
+    set {
+    name  = "server.insecure"
+    value = "true"
+   }
   
 }
