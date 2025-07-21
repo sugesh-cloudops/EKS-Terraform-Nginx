@@ -29,7 +29,7 @@ jobs:
           git config --global user.email "learndevopsallday@gmail.com"
       - name: Update HelmChart with new Tag
         run: |
-          sed -i '' "s/tag: .*/tag: ${{ env.SHORT_SHA }}/" ./helm-python-test-app/values.yaml
+          sed -i "s/tag:.*/tag: ${{ env.SHORT_SHA }}/" ./helm-python-test-app/values.yaml
           git add ./helm-python-test-app/values.yaml
           git commit -m "Update HelmChart with new Tag to ${{ env.SHORT_SHA }}"
           git push origin main
