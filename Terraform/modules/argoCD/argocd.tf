@@ -24,4 +24,5 @@ resource "helm_release" "argocd" {
     value = "true"
    }
   
+  
 }
