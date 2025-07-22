@@ -1,0 +1,33 @@
+name: Terraform Apply (Manual)
+
+on:
+  workflow_dispatch:  # Manually triggered via GitHub Actions UI
+
+jobs:
+  terraform-apply:
+    name: Terraform Plan and Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .  # Root directory where main.tf is
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.6.0
+
+    - name: Terraform Init
+      run: terraform init -backend-config=Terraform/main.tf
+
+    # - name: Terraform Plan
+    #   run: terraform plan -no-color -out=tfplan.out
+
+    # - name: Terraform Apply
+    #   run: terraform apply -auto-approve tfplan.out
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
