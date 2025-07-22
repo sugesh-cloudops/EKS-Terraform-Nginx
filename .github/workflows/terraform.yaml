@@ -21,10 +21,10 @@ jobs:
         terraform_version: 1.6.0
 
     - name: Terraform Init
-      run: terraform init -backend-config=Terraform/main.tf
+      run: terraform init -backend-config=backend/main.tf
 
-    # - name: Terraform Plan
-    #   run: terraform plan -no-color -out=tfplan.out
+    - name: Terraform Plan
+      run: terraform plan -no-color -out=tfplan.out
 
     # - name: Terraform Apply
     #   run: terraform apply -auto-approve tfplan.out
