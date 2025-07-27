@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: springboot-postgres
-        image: sugesh23/springboot:latest
+        image: springboot-postgres:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
