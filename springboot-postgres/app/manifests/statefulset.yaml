@@ -29,9 +29,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: postgres-data
-  spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: "standard"  # or local-path for kind
-      resources:
-        requests:
-          storage: 1Gi
+      spec:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: "standard"  # or local-path for kind
+          resources:
+            requests:
+              storage: 1Gi
