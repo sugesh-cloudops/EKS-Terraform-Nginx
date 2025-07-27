@@ -22,8 +22,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-postgres:${{ env.SHORT_SHA }} .
       - name: Push Docker image
         run: |
-          cd springboot-postgres/app
-          docker tag ${{ secrets.DOCKER_USERNAME }}/springboot-postgres:${{ env.SHORT_SHA }} 
+          cd springboot-postgres/app 
           docker push ${{ secrets.DOCKER_USERNAME }}/springboot-postgres:${{ env.SHORT_SHA }}
       - name: Configure Git
         run: |
@@ -31,7 +30,7 @@ jobs:
           git config --global user.email "learndevopsallday@gmail.com"
       - name: Update Deployment with new Tag
         run: |
-          sed -i "s/image: sugesh23\/springboot-postgres:.*/image: sugesh23/springboot-postgres:${{ env.SHORT_SHA }}/" ./springboot-postgres/app/manifests/deployment.yaml
+          sed -i "s/image: sugesh23/springboot-postgres:.*/image: sugesh23/springboot-postgres:${{ env.SHORT_SHA }}/" ./springboot-postgres/app/manifests/deployment.yaml
           git add ./springboot-postgres   /app/manifests/deployment.yaml
           git commit -m "Update Deployment with new Tag to ${{ env.SHORT_SHA }}"
           git push origin main  
