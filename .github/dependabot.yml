@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/springboot-postgres/app"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/springboot-postgres/app"
+    schedule:
+      interval: "weekly"
