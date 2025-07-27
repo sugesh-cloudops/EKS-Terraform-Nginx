@@ -1,15 +1,9 @@
-FROM eclipse-temurin:17-jdk
-
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
+COPY . .
+RUN mvn clean package
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-
-# Ensure mvnw is Unix-formatted and executable
-RUN apt-get update && apt-get install -y dos2unix && \
-    dos2unix mvnw && chmod +x mvnw && ./mvnw dependency:go-offline
-
-COPY src ./src
-
-# Do not override entrypoint unless needed
-CMD ["./mvnw", "spring-boot:run"]
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=builder /app/target/springboot-postgres-0.0.1-SNAPSHOT.jar app.jar
+CMD ["java", "-jar", "app.jar"]
