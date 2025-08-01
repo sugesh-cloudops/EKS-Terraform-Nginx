@@ -4,7 +4,7 @@ metadata:
   name: postgres
 spec:
   serviceName: "headless-svc"
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -21,6 +21,10 @@ spec:
             - containerPort: 5432
               name: postgres
           env:
+            - name: POSTGRES_DB
+              value: mydb
+            - name: POSTGRES_USER
+              value: postgres
             - name: POSTGRES_PASSWORD
               value: mysecretpassword
           volumeMounts:
@@ -31,7 +35,7 @@ spec:
         name: postgres-data
       spec:
           accessModes: ["ReadWriteOnce"]
-          storageClassName: "standard"  # or local-path for kind
+          storageClassName: "hostpath"  # or local-path for kind
           resources:
             requests:
               storage: 1Gi

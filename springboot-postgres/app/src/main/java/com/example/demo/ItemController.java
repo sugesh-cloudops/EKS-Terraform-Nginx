@@ -13,11 +13,10 @@ public class ItemController {
         this.repo = repo;
     }
 
-    @GetMapping
-    public List<Item> getAll() {
-        return repo.findAll();
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
     }
-
     @PostMapping
     public Item add(@RequestBody Item item) {
         return repo.save(item);
