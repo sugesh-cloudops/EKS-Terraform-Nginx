@@ -8,5 +8,5 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30080  # Optional: fixed external port
+      nodePort: 30081  # Optional: fixed external port
   type: NodePort
