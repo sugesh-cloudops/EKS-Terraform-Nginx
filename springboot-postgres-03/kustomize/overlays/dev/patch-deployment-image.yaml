@@ -7,6 +7,4 @@ spec:
     spec:
       containers:
         - name: springboot-postgres
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: dev
+          image: sugesh23/springboot-postgres:latest
